@@ -1,7 +1,7 @@
 import * as Yup from "yup";
 
 export const signUp = Yup.object({
-  fullName: Yup.string().min(3).max(20).required("Please Enter your Full Name"),
+  fullName: Yup.string().min(3).max(15).required("Please Enter your Full Name"),
   email: Yup.string().email().required("Please enter your valid email"),
   password: Yup.string()
     .min(8)

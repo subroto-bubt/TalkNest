@@ -5,14 +5,17 @@ import {
   getAuth,
   createUserWithEmailAndPassword,
   sendEmailVerification,
+  updateProfile,
 } from "firebase/auth";
 import ScaleLoader from "react-spinners/ScaleLoader";
 import { Link, useNavigate } from "react-router-dom";
+import { getDatabase, ref, set } from "firebase/database";
 
 const RegiCompForm = ({ toast }) => {
   const [loading, setLoading] = useState(false);
   const auth = getAuth();
   const navigate = useNavigate();
+  const db = getDatabase();
 
   const initialValues = {
     fullName: "",
@@ -36,39 +39,50 @@ const RegiCompForm = ({ toast }) => {
       formik.values.email,
       formik.values.password
     )
-      .then(() => {
-        sendEmailVerification(auth.currentUser)
-          .then(() => {
-            toast.success("Email sent for varification", {
-              position: "top-right",
-              autoClose: 2000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "light",
-            });
+      .then(({ user }) => {
+        updateProfile(auth.currentUser, {
+          displayName: formik.values.fullName,
+        }).then(() => {
+          sendEmailVerification(auth.currentUser)
+            .then(() => {
+              toast.success("Email sent for varification", {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+              });
 
-            const timeoutId = setTimeout(() => {
-              navigate("/login");
-            }, 2000);
-            setLoading(false);
-            return () => clearTimeout(timeoutId);
-          })
-          .catch((error) => {
-            toast.error(error.message, {
-              position: "top-right",
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "light",
+              const timeoutId = setTimeout(() => {
+                navigate("/login");
+              }, 2000);
+              setLoading(false);
+              return () => clearTimeout(timeoutId);
+            })
+            .then(() => {
+              set(ref(db, "users/" + user.uid), {
+                username: user.displayName,
+                email: user.email,
+              });
+            })
+            .catch((error) => {
+              toast.error(error.message, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+              });
+              setLoading(false);
             });
-            setLoading(false);
-          });
+        });
+        console.log(user);
       })
       .catch((error) => {
         if (error.message.includes("auth/email-already-in-use")) {

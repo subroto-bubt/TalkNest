@@ -1,12 +1,28 @@
 import React, { useRef, useState } from "react";
 import { CrossIcon } from "../../SVG/Cross";
 import { UploadIcon } from "../../SVG/Upload";
+import ImageCropper from "../ImageCropper";
+import {
+  getDownloadURL,
+  getStorage,
+  ref,
+  uploadString,
+} from "firebase/storage";
+import { useDispatch, useSelector } from "react-redux";
+import { getAuth, updateProfile } from "firebase/auth";
+import { LoggedInUser } from "../../features/slices/LoginSlice";
 
 const Modals = ({ setShow }) => {
+  const user = useSelector((user) => user.login.loggedIn);
+  const [loading, setLoading] = useState(false);
   const [image, setImage] = useState();
   const [cropData, setCropData] = useState("#");
   const cropperRef = useRef();
   const fileRef = useRef(null);
+  const storage = getStorage();
+  const auth = getAuth();
+  const dispatch = useDispatch();
+  const storageRef = ref(storage, user.uid);
 
   const handleChange = (e) => {
     e.preventDefault();
@@ -16,7 +32,36 @@ const Modals = ({ setShow }) => {
     } else if (e.target) {
       files = e.target.files;
     }
-    console.log(files);
+    const reader = new FileReader();
+    reader.onload = () => {
+      setImage(reader.result);
+    };
+    reader.readAsDataURL(files[0]);
+  };
+
+  const getCropData = () => {
+    setLoading(true);
+    if (typeof cropperRef.current?.cropper !== "undefined") {
+      setCropData(cropperRef.current?.cropper.getCroppedCanvas().toDataURL());
+      const message4 = cropperRef.current?.cropper
+        .getCroppedCanvas()
+        .toDataURL();
+      uploadString(storageRef, message4, "data_url").then((snapshot) => {
+        getDownloadURL(storageRef).then((downloadURL) => {
+          updateProfile(auth.currentUser, {
+            photoURL: downloadURL,
+          }).then(() => {
+            dispatch(LoggedInUser({ ...user, photoURL: downloadURL }));
+            localStorage.setItem(
+              "user",
+              JSON.stringify({ ...user, photoURL: downloadURL })
+            );
+            setShow(false);
+            setLoading(false);
+          });
+        });
+      });
+    }
   };
 
   return (
@@ -57,6 +102,15 @@ const Modals = ({ setShow }) => {
             </div>
           </div>
         </div>
+        {image && (
+          <ImageCropper
+            setImage={setImage}
+            cropperRef={cropperRef}
+            image={image}
+            getCropData={getCropData}
+            loading={loading}
+          />
+        )}
       </div>
     </>
   );

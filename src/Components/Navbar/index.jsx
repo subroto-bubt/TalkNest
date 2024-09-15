@@ -7,11 +7,12 @@ import AvaterImage from "../../assets/avatar.jpg";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { getAuth, signOut } from "firebase/auth";
 import { LogeOutUser } from "../../features/slices/LoginSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { createPortal } from "react-dom";
 import Modals from "../Modals";
 
 const Navbar = () => {
+  const user = useSelector((user) => user.login.loggedIn);
   const [show, setShow] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
@@ -42,8 +43,11 @@ const Navbar = () => {
           )}
           <div className="w-[166px] h-[176px]">
             <div className="flex flex-col items-center ">
-              <div className="w-[106px] h-[106px] bg-yellow-400 overflow-hidden rounded-full mt-[24px] relative">
-                <img src={AvaterImage} />
+              <div className="w-[106px] h-[106px] overflow-hidden object-cover rounded-full mt-[24px] relative">
+                <img
+                  src={user.photoURL || AvaterImage}
+                  className="w-full h-full object-cover"
+                />
               </div>
               <div
                 className="absolute top-[65px] left-[71px] text-white cursor-pointer"
@@ -52,7 +56,7 @@ const Navbar = () => {
                 <UploadIcon />
               </div>
               <div className="text-white font-InterRegular text-xl mt-[15px]">
-                <span>Subroto</span>
+                <span>{user.displayName}</span>
               </div>
             </div>
           </div>

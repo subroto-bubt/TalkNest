@@ -13,6 +13,7 @@ import Messages from "./pages/Messages";
 import LoggedInUserRoute from "./privateRoute/LoggedInUserRoute";
 import NotLoggedInUserRoute from "./privateRoute/NotLoggedInUserRoute";
 import RootLayout from "./Components/RootLayout";
+import "cropperjs/dist/cropper.css";
 
 function App() {
   const router = createBrowserRouter(
