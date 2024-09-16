@@ -86,7 +86,7 @@ const Userlist = ({ toast }) => {
         reqArr.push(item.val().receiverId + item.val().senderId);
         cancelReq.push({ ...item.val(), id: item.key });
       });
-      console.log(cancelReq);
+
       setFriendRequestList(reqArr);
       setCancelReq(cancelReq);
     });
@@ -103,22 +103,18 @@ const Userlist = ({ toast }) => {
   };
 
   // Show Friends
-  useEffect(() => {
-    const starCountRef = ref(db, "friends/");
-    onValue(starCountRef, (snapshot) => {
-      let frndReq = [];
-      snapshot.forEach((item) => {
-        if (user.uid === item.val().receiverId) {
-          frndReq.push({ ...item.val(), id: item.key });
-        }
-      });
-      setFriends(frndReq);
-    });
-  }, [db, user.uid]);
-
-  console.log(friends.includes(user.uid));
-  console.log(friends);
-  console.log(user.uid);
+  // useEffect(() => {
+  //   const starCountRef = ref(db, "friends/");
+  //   onValue(starCountRef, (snapshot) => {
+  //     let frndReq = [];
+  //     snapshot.forEach((item) => {
+  //       if (user.uid === item.val().receiverId) {
+  //         frndReq.push({ ...item.val(), id: item.key });
+  //       }
+  //     });
+  //     setFriends(frndReq);
+  //   });
+  // }, [db, user.uid]);
 
   return (
     <>
@@ -139,7 +135,7 @@ const Userlist = ({ toast }) => {
         {/* ml -28 to 20 for scrolling issue total box area total width 468 */}
         <div className="ml-[20px] mt-[44px] w-[438px] h-[730px]  overflow-y-auto">
           {/* Start of User List */}
-          {users.map((item, i) => (
+          {users?.map((item, i) => (
             <div
               className="w-[410px] h-[82px] mb-[10px] flex items-center justify-between"
               key={i}

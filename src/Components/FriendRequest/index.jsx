@@ -32,11 +32,9 @@ const FriendRequest = () => {
   // Accept Request
 
   const handleAccept = (data) => {
-    console.log(data);
     set(push(ref(db, "friends")), {
       ...data,
     }).then(() => {
-      console.log("success");
       remove(ref(db, "friendRequest/" + data.id));
     });
   };

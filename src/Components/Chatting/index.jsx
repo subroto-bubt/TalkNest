@@ -19,7 +19,63 @@ const Chatting = () => {
           </div>
         </div>
         <div className=" w-full h-[860px] rounded-b-md">
-          <div className="w-full h-[754.5px]"></div>
+          <div className="w-full h-[754.5px] my-3 overflow-y-auto">
+            {/* Sender Message */}
+            <div className="w-[60%] ml-auto">
+              <p className="bg-slate-400 p-2 rounded-md  mr-3 text-xl font-InterRegular inline-block">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque
+                dolorem accusantium consequatur, odio amet pariatur quis esse
+                velit perferendis nisi voluptatem rem quidem assumenda dolores
+                enim similique, molestias atque! Maiores, veritatis fuga
+                voluptatem pariatur exercitationem fugiat rem illum autem, animi
+                impedit esse quidem possimus sequi obcaecati omnis natus enim
+                repudiandae ullam. Iure quibusdam a explicabo quia, distinctio,
+                magni nesciunt dolores excepturi, quos hic aperiam inventore
+                placeat. Est cum debitis explicabo impedit assumenda doloremque
+                sit pariatur veniam, repudiandae commodi doloribus provident
+                quisquam deleniti quos laborum amet sapiente. Est illum odit
+                quis consequuntur corporis quidem nobis, sit sequi quibusdam
+                cumque a harum!
+              </p>
+            </div>
+            {/* Receiver Message */}
+            <div className="w-[60%] mr-auto">
+              <p className="bg-slate-300 p-2 rounded-md  ml-3 mt-3 text-xl font-InterRegular inline-block">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque
+                dolorem accusantium consequatur, odio amet pariatur quis esse
+                velit perferendis nisi voluptatem rem quidem assumenda dolores
+                enim similique, molestias atque! Maiores, veritatis fuga
+                voluptatem pariatur exercitationem fugiat rem illum autem, animi
+                impedit esse quidem possimus sequi obcaecati omnis natus enim
+                repudiandae ullam. Iure quibusdam a explicabo quia, distinctio,
+                magni nesciunt dolores excepturi, quos hic aperiam inventore
+                placeat. Est cum debitis explicabo impedit assumenda doloremque
+                sit pariatur veniam, repudiandae commodi doloribus provident
+                quisquam deleniti quos laborum amet sapiente. Est illum odit
+                quis consequuntur corporis quidem nobis, sit sequi quibusdam
+                cumque a harum!
+              </p>
+            </div>
+
+            {/* Sender Image */}
+            <div className="w-[60%] ml-auto mt-3 mr-3 overflow-hidden">
+              <img
+                className="w-full h-full object-cover rounded-md"
+                alt="img"
+                src={AvatarImage}
+              />
+            </div>
+
+            {/* Receiver Image */}
+            <div className="w-[60%] mr-auto mt-3 ml-3 overflow-hidden">
+              <img
+                className="w-full h-full object-cover rounded-md"
+                alt="img"
+                src={AvatarImage}
+              />
+            </div>
+          </div>
+
           <div className="w-full h-[105.5px] rounded-b-md">
             <div className="w-[990px] h-[80px]  bg-[#F5F5F5] rounded-md ml-[59px] flex items-center justify-between">
               {/* Icon part */}
