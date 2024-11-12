@@ -14,6 +14,7 @@ import LoggedInUserRoute from "./privateRoute/LoggedInUserRoute";
 import NotLoggedInUserRoute from "./privateRoute/NotLoggedInUserRoute";
 import RootLayout from "./Components/RootLayout";
 import "cropperjs/dist/cropper.css";
+import "react-circular-progressbar/dist/styles.css";
 
 function App() {
   const router = createBrowserRouter(

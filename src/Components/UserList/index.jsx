@@ -94,7 +94,7 @@ const Userlist = ({ toast }) => {
 
   const handleCancelReq = (itemId) => {
     const reqToCancel = cancelReq.find(
-      (req) => req.receiverId === itemId && req.senderId === user.uid
+      (req) => req?.receiverId === itemId && req?.senderId === user.uid
     );
 
     if (reqToCancel) {
@@ -103,19 +103,25 @@ const Userlist = ({ toast }) => {
   };
 
   // Show Friends
-  // useEffect(() => {
-  //   const starCountRef = ref(db, "friends/");
-  //   onValue(starCountRef, (snapshot) => {
-  //     let frndReq = [];
-  //     snapshot.forEach((item) => {
-  //       if (user.uid === item.val().receiverId) {
-  //         frndReq.push({ ...item.val(), id: item.key });
-  //       }
-  //     });
-  //     setFriends(frndReq);
-  //   });
-  // }, [db, user.uid]);
+  useEffect(() => {
+    const starCountRef = ref(db, "friends/");
+    onValue(starCountRef, (snapshot) => {
+      let frndReq = [];
+      let frndlnCount = 0;
+      snapshot.forEach((item) => {
+        if (
+          user.uid === item.val()?.receiverId ||
+          user.uid === item.val()?.senderId
+        ) {
+          frndReq.push({ ...item.val(), id: item.key });
+        }
+      });
+      setFriends(frndReq);
+    });
+  }, [db, user.uid]);
 
+  const friendCount = friends.length;
+  console.log(friendCount);
   return (
     <>
       <div flex flex-col-3>
@@ -140,20 +146,21 @@ const Userlist = ({ toast }) => {
               className="w-[410px] h-[82px] mb-[10px] flex items-center justify-between"
               key={i}
             >
+              {/* <div>{console.log(friends.includes(item.id))}</div> */}
               <div className="flex items-center">
                 <div>
                   <div className="w-[82px] h-[82px] rounded-full overflow-hidden">
-                    <img src={item.photoURL || AvaterImage} />
+                    <img src={item?.photoURL || AvaterImage} />
                   </div>
                 </div>
                 <div>
                   <h1 className="text-[#3D3C3C] font-InterRegular text-[23px] ml-[13px]">
-                    {item.username}
+                    {item?.username}
                   </h1>
                 </div>
               </div>
 
-              {friendRequestList.includes(item.id + user.uid) ? (
+              {friendRequestList.includes(item?.id + user.uid) ? (
                 <button
                   className="w-[123.68px] h-[41.23px] bg-[#D34A4A] text-sm font-InterRegular text-[#FFFFFF] rounded-md"
                   onClick={() => handleCancelReq(item.id)}
@@ -163,6 +170,10 @@ const Userlist = ({ toast }) => {
               ) : friendRequestList.includes(user.uid + item.id) ? (
                 <button className="w-[123.68px] h-[41.23px] bg-[#D34A4A] text-sm font-InterRegular text-[#FFFFFF] rounded-md">
                   Panding Request
+                </button>
+              ) : friends.includes(item.id) ? (
+                <button className="w-[123.68px] h-[41.23px] bg-[#3E8DEB] text-sm font-InterRegular text-[#FFFFFF] rounded-md">
+                  Friend
                 </button>
               ) : (
                 <div

@@ -22,7 +22,6 @@ const LoginFormCom = ({ toast }) => {
     initialValues,
     onSubmit: () => {
       signInUser();
-      console.log("submit");
     },
     validationSchema: signIn,
   });
